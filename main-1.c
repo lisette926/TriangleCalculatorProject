@@ -45,7 +45,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "triangles.h"
+#include "triangleCalculator.h"
 #define PI 3.141593
 #define RADS PI/180
 
