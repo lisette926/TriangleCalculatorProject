@@ -1,6 +1,7 @@
 /*
   Description: This program will calculate the area of a triangle using the information available, which the user will input.
-  This update of the program uses loops to check the data inputted by the user.
+  This update of the program uses loops to check the data inputted by the user and includes a user defined library for the menu of options 
+  and the formulas used to find the area of the triangle.
   
   Area can be found using:
   1 - three sides
@@ -44,6 +45,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include "triangles.h"
 #define PI 3.141593
 #define RADS PI/180
 
@@ -66,16 +68,7 @@ int main(void) {
         y3;
 
   //asks user for which information they have on triangle
-  printf("\t\t\tTriangle Calculator\n\n"
-          "Enter 1-6 to calculate the area of a triangle using the following information: \n\n"
-          "\t1 - three sides (SSS)\n"
-          "\t2 - side, angle, side (SAS)\n"
-          "\t3 - side, side, angle (SSA)\n"
-          "\t4 - angle, side, angle (ASA)\n"
-          "\t5 - angle, angle, side (AAS)\n"
-          "\t6 - coordinates of three vertices\n\n"
-          ">>");
-  
+  printMenu();
   scanf("%d", &options);
 
   switch(options)
@@ -93,10 +86,7 @@ int main(void) {
 
       if(sideA + sideB > sideC && sideB + sideC > sideA && sideA + sideC > sideB)
       {
-        semiPerimeter = (sideA + sideB +sideC) / 2.0;
-      
-        area = sqrt(semiPerimeter * (semiPerimeter - sideA) * (semiPerimeter -sideB) * (semiPerimeter - sideC));
-        
+        area = areaSSS(sideA, sideB, sideC);
         printf("\nThe area is: %.2f units^2\n\n", area); 
       }
       else
@@ -126,7 +116,6 @@ int main(void) {
 
       printf("Enter angle C: ");
       scanf("%f", &angleC);
-
       while((angleC < 0) || (angleC > 180))
       {
         printf("\n\tError: The angle should be between 1 - 180\n\n");
@@ -134,7 +123,7 @@ int main(void) {
         scanf("%f", &angleC);
       }
 
-        area = (sideA * sideB * sin(angleC * RADS)) / 2.0;
+        area = areaSAS(sideA, sideB, angleC);
         printf("\nThe area is: %.2f\n\n", area);
       break;
     //calculates area of triangle using SSA
@@ -167,9 +156,7 @@ int main(void) {
         scanf("%f", &angleB);
       }
       
-      angleA = (asin ((sin(angleB * RADS) * sideA)/sideB)) * (180.0/PI);        
-      angleC = 180 - angleA - angleB;  
-      area = (sideA * sideB * sin(angleC * RADS))/2;
+      area = areaSSA(sideA, sideB, angleB);
       printf("\nThe area is: %.2f\n\n",area);
       break;
     //calculates area of triangle using ASA
@@ -184,8 +171,7 @@ int main(void) {
       }
 
       printf("\nEnter angle A: ");
-      scanf("%f", &angleA);
-      
+      scanf("%f", &angleA);    
       while((angleA < 0) || (angleA > 180))
       {
         printf("\n\tError: The angle should be between 1 - 180\n\n");
@@ -195,7 +181,6 @@ int main(void) {
       
       printf("Enter angle B: ");
       scanf("%f", &angleB);
-
       while((angleB < 0) || (angleB > 180))
       {
         printf("\n\tError: The angle should be between 1 - 180\n\n");
@@ -210,13 +195,7 @@ int main(void) {
         scanf("%f", &angleB);
       }
 
-      angleC = 180 - angleA - angleB;
-      
-      sideA = (sideC / sin(angleC * RADS)) * sin(angleA * RADS);
-
-      sideB = (sideC / sin(angleC * RADS)) * sin(angleB * RADS);
-
-      area = (sideA * sideB * sin(angleC * RADS))/2.0;
+      area = areaASA(sideC, angleA, angleB);
       printf("\nThe area is: %.2f\n\n", area);
       break;
     //calculates area of triangle using AAS
@@ -232,7 +211,6 @@ int main(void) {
       
       printf("\nEnter angle A: ");
       scanf("%f", &angleA);
-      
       while((angleA < 0) || (angleA > 180))
       {
         printf("\n\tError: The angle should be between 1 - 180\n\n");
@@ -242,7 +220,6 @@ int main(void) {
 
       printf("Enter angle B: ");
       scanf("%f", &angleB);
-
       while((angleB < 0) || (angleB > 180))
       {
         printf("\n\tError: The angle should be between 1 - 180\n\n");
@@ -257,11 +234,7 @@ int main(void) {
         scanf("%f", &angleB);
       }
 
-      angleC = 180 - angleA - angleB;
-      
-      sideB = (sideA / sin(angleA * RADS)) * sin(angleB * RADS);
-      
-      area = (sideA * sideB * sin(angleC*RADS))/2.0;
+      area = areaAAS(sideA, angleA, angleB);
       printf("\nThe area is: %.2f\n\n", area);
       break;
     //calculates area of triangle using coordinats of 3 vertices
@@ -292,8 +265,7 @@ int main(void) {
         scanf("%f %f", &x3, &y3);
       }
 
-      area = -((x1 * (y2 - y3)) + (x2 * (y3 - y1)) + (x3 * (y1 - y2)))/2.0;
-      
+      area = areaVertices(x1, y1, x2, y2, x3, y3);
       printf("\nThe area is: %.2f\n\n", area);
       break;
     default : printf("\nERROR: An invalid number was entered");
